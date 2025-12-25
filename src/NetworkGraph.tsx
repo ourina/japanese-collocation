@@ -1188,6 +1188,45 @@ function NetworkGraph() {
               style={{ marginTop: '8px' }}
             />
           </div>
+          <div>
+            <Typography.Text strong>预览</Typography.Text>
+            <div
+              style={{
+                marginTop: '8px',
+                padding: '24px',
+                border: '1px solid #d9d9d9',
+                borderRadius: '4px',
+                background: '#fafafa',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                minHeight: '100px',
+              }}
+            >
+              {editingNode?.nodeType && (
+                <div
+                  style={{
+                    width: NODE_TYPES[editingNode.nodeType as keyof typeof NODE_TYPES].size * 3,
+                    height: NODE_TYPES[editingNode.nodeType as keyof typeof NODE_TYPES].size * 3,
+                    borderRadius: '50%',
+                    border: `3px solid ${
+                      NODE_TYPES[editingNode.nodeType as keyof typeof NODE_TYPES].color.border
+                    }`,
+                    background:
+                      NODE_TYPES[editingNode.nodeType as keyof typeof NODE_TYPES].color.background,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    fontSize: NODE_TYPES[editingNode.nodeType as keyof typeof NODE_TYPES].size,
+                    fontWeight: 'normal',
+                    color: '#000000',
+                  }}
+                >
+                  {editingNode?.label || '节点名称'}
+                </div>
+              )}
+            </div>
+          </div>
         </Space>
       </Modal>
 
@@ -1299,6 +1338,40 @@ function NetworkGraph() {
               onPressEnter={addNodeAndClose}
               style={{ marginTop: '8px' }}
             />
+          </div>
+          <div>
+            <Typography.Text strong>预览</Typography.Text>
+            <div
+              style={{
+                marginTop: '8px',
+                padding: '24px',
+                border: '1px solid #d9d9d9',
+                borderRadius: '4px',
+                background: '#fafafa',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                minHeight: '100px',
+              }}
+            >
+              <div
+                style={{
+                  width: NODE_TYPES[selectedNodeType].size * 3,
+                  height: NODE_TYPES[selectedNodeType].size * 3,
+                  borderRadius: '50%',
+                  border: `3px solid ${NODE_TYPES[selectedNodeType].color.border}`,
+                  background: NODE_TYPES[selectedNodeType].color.background,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  fontSize: NODE_TYPES[selectedNodeType].size,
+                  fontWeight: 'normal',
+                  color: '#000000',
+                }}
+              >
+                {newNodeLabel || '节点名称'}
+              </div>
+            </div>
           </div>
           <div>
             <Typography.Text
