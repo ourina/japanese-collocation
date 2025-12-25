@@ -41,7 +41,7 @@ interface EdgeType {
   }
 }
 
-// ノードタイプの定義 - 美化配色方案
+// ノードタイプの定義
 const NODE_TYPES = {
   large_red: {
     name: '大（赤）',
@@ -462,7 +462,7 @@ function NetworkGraph() {
     loadData()
 
     // Clickイベントハンドラを追加する
-    network?.on('click', (params: { nodes: number[] }) => {})
+    network?.on('click', () => {})
   }, [updateTrigger])
 
   // 新しいノードを追加する
@@ -497,17 +497,17 @@ function NetworkGraph() {
     }
   }
 
-  // 打开添加节点模态框
+  // ノード追加モーダルを開く
   const openAddNodeModal = () => {
     setIsAddNodeModalVisible(true)
   }
 
-  // 关闭添加节点模态框
+  // ノード追加モーダルを閉じる
   const closeAddNodeModal = () => {
     setIsAddNodeModalVisible(false)
   }
 
-  // 添加节点并关闭模态框
+  // ノードを追加してモーダルを閉じる
   const addNodeAndClose = async () => {
     await addNode()
     if (newNodeLabel.trim()) {
@@ -561,17 +561,17 @@ function NetworkGraph() {
     }
   }
 
-  // 打开添加边模态框
+  // エッジ追加モーダルを開く
   const openAddEdgeModal = () => {
     setIsAddEdgeModalVisible(true)
   }
 
-  // 关闭添加边模态框
+  // エッジ追加モーダルを閉じる
   const closeAddEdgeModal = () => {
     setIsAddEdgeModalVisible(false)
   }
 
-  // 添加边并关闭模态框
+  // エッジを追加してモーダルを閉じる
   const addEdgeAndClose = async () => {
     await addEdge()
     if (edgeFrom && edgeTo) {
@@ -579,7 +579,7 @@ function NetworkGraph() {
     }
   }
 
-  // 获取所有边的列表（用于表格显示）
+  // 全エッジリストを取得（テーブル表示用）
   const getEdgesList = () => {
     const edges = edgesDataSet.current.get()
     return edges.map((edge: any) => {
@@ -591,18 +591,18 @@ function NetworkGraph() {
         id: edge.id,
         from: edge.from,
         to: edge.to,
-        fromLabel: fromNode?.label || '未知',
-        toLabel: toNode?.label || '未知',
+        fromLabel: fromNode?.label || '不明',
+        toLabel: toNode?.label || '不明',
         label: edge.label || '',
       }
     })
   }
 
-  // 获取所有节点的列表（用于表格显示）
+  // 全ノードリストを取得（テーブル表示用）
   const getNodesListForTable = () => {
     const nodes = nodesDataSet.current.get()
     return nodes.map((node: any) => {
-      // 统计该节点的连接数
+      // このノードの接続数を計算
       const edges = edgesDataSet.current.get()
       const connectedEdges = edges.filter(
         (edge: any) => edge.from === node.id || edge.to === node.id
@@ -615,38 +615,38 @@ function NetworkGraph() {
     })
   }
 
-  // 打开边管理模态框
+  // エッジ管理モーダルを開く
   const openEdgeModal = () => {
     setIsEdgeModalVisible(true)
     setEdgeSearchText('')
     setSelectedEdgeIds([])
   }
 
-  // 关闭边管理模态框
+  // エッジ管理モーダルを閉じる
   const closeEdgeModal = () => {
     setIsEdgeModalVisible(false)
     setEdgeSearchText('')
     setSelectedEdgeIds([])
   }
 
-  // 打开节点管理模态框
+  // ノード管理モーダルを開く
   const openNodeModal = () => {
     setIsNodeModalVisible(true)
     setNodeSearchText('')
     setSelectedNodeIdsInModal([])
   }
 
-  // 关闭节点管理模态框
+  // ノード管理モーダルを閉じる
   const closeNodeModal = () => {
     setIsNodeModalVisible(false)
     setNodeSearchText('')
     setSelectedNodeIdsInModal([])
   }
 
-  // 删除选中的节点（模态框中）
+  // 選択されたノードを削除（モーダル内）
   const deleteNodesFromModal = () => {
     if (selectedNodeIdsInModal.length === 0) {
-      message.error('请选择要删除的节点')
+      message.error('削除するノードを選択してください')
       return
     }
 
@@ -658,10 +658,10 @@ function NetworkGraph() {
       .join('\n')
 
     Modal.confirm({
-      title: '节点删除',
-      content: `确定要删除选中的 ${selectedNodeIdsInModal.length} 个节点吗？\n\n${nodeLabels}\n\n※关联的边也将被删除`,
-      okText: '删除',
-      cancelText: '取消',
+      title: 'ノードの削除',
+      content: `選択した ${selectedNodeIdsInModal.length} 個のノードを削除しますか？\n\n${nodeLabels}\n\n※関連するエッジも削除されます`,
+      okText: '削除',
+      cancelText: 'キャンセル',
       okType: 'danger',
       async onOk() {
         try {
@@ -690,11 +690,11 @@ function NetworkGraph() {
           // 从 DataSet 删除节点
           nodesDataSet.current.remove(selectedNodeIdsInModal)
           setSelectedNodeIdsInModal([])
-          message.success('节点已删除')
+          message.success('ノードを削除しました')
           closeNodeModal()
         } catch (error) {
-          console.error('节点删除失败:', error)
-          message.error('节点删除失败')
+          console.error('ノードの削除に失敗:', error)
+          message.error('ノードの削除に失敗しました')
         }
       },
     })
@@ -732,11 +732,11 @@ function NetworkGraph() {
 
       await saveNode(updatedNode)
       nodesDataSet.current.update(updatedNode)
-      message.success('节点已更新')
+      message.success('ノードが更新されました')
       closeEditNodeModal()
     } catch (error) {
-      console.error('节点更新失败:', error)
-      message.error('节点更新失败')
+      console.error('ノードの更新に失敗しました:', error)
+      message.error('ノードの更新に失敗しました')
     }
   }
 
@@ -759,7 +759,7 @@ function NetworkGraph() {
     }
 
     if (!editingEdge.from || !editingEdge.to) {
-      message.error('请选择开始节点和结束节点')
+      message.error('開始ノードと終了ノードを選択してください')
       return
     }
 
@@ -774,26 +774,26 @@ function NetworkGraph() {
 
       await saveEdge(updatedEdge)
       edgesDataSet.current.update(updatedEdge)
-      message.success('边已更新')
+      message.success('エッジが更新されました')
       closeEditEdgeModal()
     } catch (error) {
-      console.error('边更新失败:', error)
-      message.error('边更新失败')
+      console.error('エッジの更新に失敗しました:', error)
+      message.error('エッジの更新に失敗しました')
     }
   }
 
   // 删除选中的边
   const deleteSelectedEdges = () => {
     if (selectedEdgeIds.length === 0) {
-      message.error('请选择要删除的边')
+      message.error('削除するエッジを選択してください')
       return
     }
 
     Modal.confirm({
-      title: '删除边',
-      content: `确定要删除选中的 ${selectedEdgeIds.length} 条边吗？`,
-      okText: '删除',
-      cancelText: '取消',
+      title: 'エッジを削除',
+      content: `選択した ${selectedEdgeIds.length} 件のエッジを削除しますか？`,
+      okText: '削除',
+      cancelText: 'キャンセル',
       okType: 'danger',
       async onOk() {
         try {
@@ -802,11 +802,11 @@ function NetworkGraph() {
           }
           edgesDataSet.current.remove(selectedEdgeIds)
           setSelectedEdgeIds([])
-          message.success('边已删除')
+          message.success('エッジが削除されました')
           closeEdgeModal()
         } catch (error) {
-          console.error('边删除失败:', error)
-          message.error('边删除失败')
+          console.error('エッジの削除に失敗しました:', error)
+          message.error('エッジの削除に失敗しました')
         }
       },
     })
@@ -822,7 +822,7 @@ function NetworkGraph() {
       sorter: (a, b) => a.id - b.id,
     },
     {
-      title: '开始节点',
+      title: '開始ノード',
       dataIndex: 'fromLabel',
       key: 'fromLabel',
       sorter: (a, b) => a.fromLabel.localeCompare(b.fromLabel),
@@ -838,13 +838,13 @@ function NetworkGraph() {
       },
     },
     {
-      title: '结束节点',
+      title: '終了ノード',
       dataIndex: 'toLabel',
       key: 'toLabel',
       sorter: (a, b) => a.toLabel.localeCompare(b.toLabel),
     },
     {
-      title: '标签',
+      title: 'ラベル',
       dataIndex: 'label',
       key: 'label',
     },
@@ -858,7 +858,7 @@ function NetworkGraph() {
           icon={<EditOutlined />}
           onClick={() => openEditEdgeModal(record)}
         >
-          编辑
+          編集
         </Button>
       ),
     },
@@ -874,7 +874,7 @@ function NetworkGraph() {
       sorter: (a, b) => a.id - b.id,
     },
     {
-      title: '节点名称',
+      title: 'ノード名',
       dataIndex: 'label',
       key: 'label',
       sorter: (a, b) => a.label.localeCompare(b.label),
@@ -888,7 +888,7 @@ function NetworkGraph() {
       },
     },
     {
-      title: '连接数',
+      title: '接続数',
       dataIndex: 'connections',
       key: 'connections',
       width: 100,
@@ -904,7 +904,7 @@ function NetworkGraph() {
           icon={<EditOutlined />}
           onClick={() => openEditNodeModal(record)}
         >
-          编辑
+          編集
         </Button>
       ),
     },
@@ -989,28 +989,28 @@ function NetworkGraph() {
               icon={<PlusOutlined />}
               onClick={openAddNodeModal}
             >
-              添加节点
+              ノードを追加
             </Button>
             <Button
               type="primary"
               icon={<PlusOutlined />}
               onClick={openAddEdgeModal}
             >
-              添加边
+              エッジを追加
             </Button>
 
             <Button
               icon={<SettingOutlined />}
               onClick={openNodeModal}
             >
-              管理节点
+              ノード管理
             </Button>
 
             <Button
               icon={<SettingOutlined />}
               onClick={openEdgeModal}
             >
-              管理边
+              エッジ管理
             </Button>
 
             {selectedNodes.length > 0 && (
@@ -1041,9 +1041,9 @@ function NetworkGraph() {
         ref={ref}
       ></div>
 
-      {/* 边管理模态框 */}
+      {/* エッジ管理モーダル */}
       <Modal
-        title="边管理"
+        title="エッジ管理"
         open={isEdgeModalVisible}
         onCancel={closeEdgeModal}
         width={800}
@@ -1055,19 +1055,19 @@ function NetworkGraph() {
             onClick={deleteSelectedEdges}
             disabled={selectedEdgeIds.length === 0}
           >
-            删除选中 ({selectedEdgeIds.length})
+            選択を削除 ({selectedEdgeIds.length})
           </Button>,
           <Button
             key="close"
             onClick={closeEdgeModal}
           >
-            关闭
+            閉じる
           </Button>,
         ]}
       >
         <div style={{ marginBottom: '16px' }}>
           <Input
-            placeholder="搜索边（节点名称、标签或ID）"
+            placeholder="エッジを検索（ノード名、ラベルまたはID）"
             value={edgeSearchText}
             onChange={(e) => setEdgeSearchText(e.target.value)}
             style={{ width: '100%' }}
@@ -1087,15 +1087,15 @@ function NetworkGraph() {
           pagination={{
             pageSize: 10,
             showSizeChanger: true,
-            showTotal: (total) => `共 ${total} 条边`,
+            showTotal: (total) => `全 ${total} 件のエッジ`,
           }}
           scroll={{ y: 400 }}
         />
       </Modal>
 
-      {/* 节点管理模态框 */}
+      {/* ノード管理モーダル */}
       <Modal
-        title="节点管理"
+        title="ノード管理"
         open={isNodeModalVisible}
         onCancel={closeNodeModal}
         width={800}
@@ -1107,19 +1107,19 @@ function NetworkGraph() {
             onClick={deleteNodesFromModal}
             disabled={selectedNodeIdsInModal.length === 0}
           >
-            删除选中 ({selectedNodeIdsInModal.length})
+            選択を削除 ({selectedNodeIdsInModal.length})
           </Button>,
           <Button
             key="close"
             onClick={closeNodeModal}
           >
-            关闭
+            閉じる
           </Button>,
         ]}
       >
         <div style={{ marginBottom: '16px' }}>
           <Input
-            placeholder="搜索节点（名称或ID）"
+            placeholder="ノードを検索（名前またはID）"
             value={nodeSearchText}
             onChange={(e) => setNodeSearchText(e.target.value)}
             style={{ width: '100%' }}
@@ -1139,31 +1139,31 @@ function NetworkGraph() {
           pagination={{
             pageSize: 10,
             showSizeChanger: true,
-            showTotal: (total) => `共 ${total} 个节点`,
+            showTotal: (total) => `全 ${total} 件のノード`,
           }}
           scroll={{ y: 400 }}
         />
       </Modal>
 
-      {/* 编辑节点模态框 */}
+      {/* ノード編集モーダル */}
       <Modal
-        title="编辑节点"
+        title="ノードを編集"
         open={isEditNodeModalVisible}
         onCancel={closeEditNodeModal}
         onOk={saveEditedNode}
         okText="保存"
-        cancelText="取消"
+        cancelText="キャンセル"
       >
         <Space
           direction="vertical"
           style={{ width: '100%' }}
         >
           <div>
-            <Typography.Text strong>节点ID: </Typography.Text>
+            <Typography.Text strong>ノードID: </Typography.Text>
             <Typography.Text>{editingNode?.id}</Typography.Text>
           </div>
           <div>
-            <Typography.Text strong>节点类型</Typography.Text>
+            <Typography.Text strong>ノードタイプ</Typography.Text>
             <Select
               value={editingNode?.nodeType}
               onChange={(value) => setEditingNode({ ...editingNode, nodeType: value })}
@@ -1180,16 +1180,16 @@ function NetworkGraph() {
             </Select>
           </div>
           <div>
-            <Typography.Text strong>节点名称</Typography.Text>
+            <Typography.Text strong>ノード名</Typography.Text>
             <Input
               value={editingNode?.label}
               onChange={(e) => setEditingNode({ ...editingNode, label: e.target.value })}
-              placeholder="请输入节点名称"
+              placeholder="ノード名を入力"
               style={{ marginTop: '8px' }}
             />
           </div>
           <div>
-            <Typography.Text strong>预览</Typography.Text>
+            <Typography.Text strong>プレビュー</Typography.Text>
             <div
               style={{
                 marginTop: '8px',
@@ -1222,7 +1222,7 @@ function NetworkGraph() {
                     color: '#000000',
                   }}
                 >
-                  {editingNode?.label || '节点名称'}
+                  {editingNode?.label || 'ノード名'}
                 </div>
               )}
             </div>
@@ -1230,32 +1230,32 @@ function NetworkGraph() {
         </Space>
       </Modal>
 
-      {/* 编辑边模态框 */}
+      {/* エッジ編集モーダル */}
       <Modal
-        title="编辑边"
+        title="エッジを編集"
         open={isEditEdgeModalVisible}
         onCancel={closeEditEdgeModal}
         onOk={saveEditedEdge}
         okText="保存"
-        cancelText="取消"
+        cancelText="キャンセル"
       >
         <Space
           direction="vertical"
           style={{ width: '100%' }}
         >
           <div>
-            <Typography.Text strong>边ID: </Typography.Text>
+            <Typography.Text strong>エッジID: </Typography.Text>
             <Typography.Text>{editingEdge?.id}</Typography.Text>
           </div>
           <div>
-            <Typography.Text strong>开始节点</Typography.Text>
+            <Typography.Text strong>開始ノード</Typography.Text>
             <Select
               value={editingEdge?.from}
               onChange={(value) => setEditingEdge({ ...editingEdge, from: value })}
               style={{ width: '100%', marginTop: '8px' }}
               showSearch
               optionFilterProp="children"
-              placeholder="选择开始节点"
+              placeholder="開始ノードを選択"
             >
               {getNodesList().map((node) => (
                 <Select.Option
@@ -1268,14 +1268,14 @@ function NetworkGraph() {
             </Select>
           </div>
           <div>
-            <Typography.Text strong>结束节点</Typography.Text>
+            <Typography.Text strong>終了ノード</Typography.Text>
             <Select
               value={editingEdge?.to}
               onChange={(value) => setEditingEdge({ ...editingEdge, to: value })}
               style={{ width: '100%', marginTop: '8px' }}
               showSearch
               optionFilterProp="children"
-              placeholder="选择结束节点"
+              placeholder="終了ノードを選択"
             >
               {getNodesList().map((node) => (
                 <Select.Option
@@ -1288,32 +1288,32 @@ function NetworkGraph() {
             </Select>
           </div>
           <div>
-            <Typography.Text strong>边标签</Typography.Text>
+            <Typography.Text strong>エッジラベル</Typography.Text>
             <Input
               value={editingEdge?.label}
               onChange={(e) => setEditingEdge({ ...editingEdge, label: e.target.value })}
-              placeholder="请输入边标签（可选）"
+              placeholder="エッジラベルを入力（任意）"
               style={{ marginTop: '8px' }}
             />
           </div>
         </Space>
       </Modal>
 
-      {/* 添加节点模态框 */}
+      {/* ノード追加モーダル */}
       <Modal
-        title="添加节点"
+        title="ノードを追加"
         open={isAddNodeModalVisible}
         onCancel={closeAddNodeModal}
         onOk={addNodeAndClose}
-        okText="添加"
-        cancelText="取消"
+        okText="追加"
+        cancelText="キャンセル"
       >
         <Space
           direction="vertical"
           style={{ width: '100%' }}
         >
           <div>
-            <Typography.Text strong>节点类型</Typography.Text>
+            <Typography.Text strong>ノードタイプ</Typography.Text>
             <Select
               value={selectedNodeType}
               onChange={(value) => setSelectedNodeType(value as keyof typeof NODE_TYPES)}
@@ -1330,9 +1330,9 @@ function NetworkGraph() {
             </Select>
           </div>
           <div>
-            <Typography.Text strong>节点名称</Typography.Text>
+            <Typography.Text strong>ノード名</Typography.Text>
             <Input
-              placeholder="请输入节点名称"
+              placeholder="ノード名を入力"
               value={newNodeLabel}
               onChange={(e) => setNewNodeLabel(e.target.value)}
               onPressEnter={addNodeAndClose}
@@ -1340,7 +1340,7 @@ function NetworkGraph() {
             />
           </div>
           <div>
-            <Typography.Text strong>预览</Typography.Text>
+            <Typography.Text strong>プレビュー</Typography.Text>
             <div
               style={{
                 marginTop: '8px',
@@ -1369,7 +1369,7 @@ function NetworkGraph() {
                   color: '#000000',
                 }}
               >
-                {newNodeLabel || '节点名称'}
+                {newNodeLabel || 'ノード名'}
               </div>
             </div>
           </div>
@@ -1378,29 +1378,29 @@ function NetworkGraph() {
               type="secondary"
               style={{ fontSize: '12px' }}
             >
-              下一个节点ID: {nextNodeId}
+              次のノードID: {nextNodeId}
             </Typography.Text>
           </div>
         </Space>
       </Modal>
 
-      {/* 添加边模态框 */}
+      {/* エッジ追加モーダル */}
       <Modal
-        title="添加边"
+        title="エッジを追加"
         open={isAddEdgeModalVisible}
         onCancel={closeAddEdgeModal}
         onOk={addEdgeAndClose}
-        okText="添加"
-        cancelText="取消"
+        okText="追加"
+        cancelText="キャンセル"
       >
         <Space
           direction="vertical"
           style={{ width: '100%' }}
         >
           <div>
-            <Typography.Text strong>开始节点</Typography.Text>
+            <Typography.Text strong>開始ノード</Typography.Text>
             <Select
-              placeholder="选择开始节点"
+              placeholder="開始ノードを選択"
               value={edgeFrom || undefined}
               onChange={(value) => setEdgeFrom(value)}
               style={{ width: '100%', marginTop: '8px' }}
@@ -1418,9 +1418,9 @@ function NetworkGraph() {
             </Select>
           </div>
           <div>
-            <Typography.Text strong>结束节点</Typography.Text>
+            <Typography.Text strong>終了ノード</Typography.Text>
             <Select
-              placeholder="选择结束节点"
+              placeholder="終了ノードを選択"
               value={edgeTo || undefined}
               onChange={(value) => setEdgeTo(value)}
               style={{ width: '100%', marginTop: '8px' }}
@@ -1438,9 +1438,9 @@ function NetworkGraph() {
             </Select>
           </div>
           <div>
-            <Typography.Text strong>边标签（可选）</Typography.Text>
+            <Typography.Text strong>エッジラベル（任意）</Typography.Text>
             <Input
-              placeholder="请输入边标签"
+              placeholder="エッジラベルを入力"
               value={edgeLabel}
               onChange={(e) => setEdgeLabel(e.target.value)}
               onPressEnter={addEdgeAndClose}
