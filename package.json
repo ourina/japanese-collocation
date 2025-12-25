@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@types/vis": "^4.21.27",
+    "antd": "^6.1.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "vis-network": "^10.0.2"
