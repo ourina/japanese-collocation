@@ -981,7 +981,7 @@ function NetworkGraph() {
             level={3}
             style={{ margin: 0 }}
           >
-            日本語コロケーションネットワーク図
+            日本語コロケーション
           </Typography.Title>
           <Space wrap>
             <Button
@@ -999,6 +999,20 @@ function NetworkGraph() {
               添加边
             </Button>
 
+            <Button
+              icon={<SettingOutlined />}
+              onClick={openNodeModal}
+            >
+              管理节点
+            </Button>
+
+            <Button
+              icon={<SettingOutlined />}
+              onClick={openEdgeModal}
+            >
+              管理边
+            </Button>
+
             {selectedNodes.length > 0 && (
               <Button
                 type="default"
@@ -1009,22 +1023,6 @@ function NetworkGraph() {
                 選択ノードを削除 ({selectedNodes.length})
               </Button>
             )}
-
-            <Button
-              type="primary"
-              icon={<SettingOutlined />}
-              onClick={openNodeModal}
-            >
-              管理节点
-            </Button>
-
-            <Button
-              type="primary"
-              icon={<SettingOutlined />}
-              onClick={openEdgeModal}
-            >
-              管理边
-            </Button>
 
             <Button
               danger
@@ -1345,9 +1343,6 @@ function NetworkGraph() {
                 </Select.Option>
               ))}
             </Select>
-          </div>
-          <div style={{ textAlign: 'center', fontSize: '16px' }}>
-            <Typography.Text>↓</Typography.Text>
           </div>
           <div>
             <Typography.Text strong>结束节点</Typography.Text>

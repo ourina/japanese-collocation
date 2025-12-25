@@ -39,3 +39,11 @@ h1 {
     background-color: #f9f9f9;
   }
 }
+
+/* NetworkGraph styles */
+.ant-modal-root .ant-modal-container .ant-modal-header {
+  margin-bottom: 2rem;
+}
+.ant-modal-root .ant-modal-container .ant-modal-title {
+  color: #72a0eb;
+}
