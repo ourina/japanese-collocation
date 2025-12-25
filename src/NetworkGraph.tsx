@@ -41,143 +41,106 @@ interface EdgeType {
   }
 }
 
-// ノードタイプの定義
-const NODE_TYPES = {
-  large_red: {
-    name: '大（赤）',
-    size: 30,
-    color: {
-      border: '#e91e63',
-      background: '#ffe4e6',
-      highlight: { border: '#c2185b', background: '#f06292' },
+// ノード設定の定義
+
+// サイズオプション
+const SIZE_OPTIONS = {
+  large: { name: '大', size: 30, font: 20, border: 2 },
+  medium: { name: '中', size: 24, font: 16, border: 1 },
+  small: { name: '小', size: 18, font: 12, border: 1 },
+}
+
+// カラーオプション
+const COLOR_PACITIES = {
+  highlightBorder: '.8',
+  highlightBackground: '.3',
+  border: '.3',
+  background: '.3',
+}
+const COLORS = {
+  red: (opacity: string) => `rgba(233, 30, 30, ${opacity})`,
+  blue: (opacity: string) => `rgba(64, 150, 255, ${opacity})`,
+  green: (opacity: string) => `rgba(76, 175, 80, ${opacity})`,
+  purple: (opacity: string) => `rgba(156, 39, 176, ${opacity})`,
+  orange: (opacity: string) => `rgba(255, 152, 0, ${opacity})`,
+}
+const COLOR_OPTIONS = {
+  red: {
+    name: '赤',
+    border: COLORS.red(COLOR_PACITIES.border),
+    background: COLORS.red(COLOR_PACITIES.background),
+    highlight: {
+      border: COLORS.red(COLOR_PACITIES.highlightBorder),
+      background: COLORS.red(COLOR_PACITIES.highlightBackground),
     },
   },
-  large_blue: {
-    name: '大（青）',
-    size: 30,
-    color: {
-      border: '#2196f3',
-      background: '#e3f2fd',
-      highlight: { border: '#1976d2', background: '#64b5f6' },
+  blue: {
+    name: '青',
+    border: COLORS.blue(COLOR_PACITIES.border),
+    background: COLORS.blue(COLOR_PACITIES.background),
+    highlight: {
+      border: COLORS.blue(COLOR_PACITIES.highlightBorder),
+      background: COLORS.blue(COLOR_PACITIES.highlightBackground),
     },
   },
-  large_green: {
-    name: '大（緑）',
-    size: 30,
-    color: {
-      border: '#4caf50',
-      background: '#e8f5e9',
-      highlight: { border: '#388e3c', background: '#81c784' },
+  green: {
+    name: '緑',
+    border: COLORS.green(COLOR_PACITIES.border),
+    background: COLORS.green(COLOR_PACITIES.background),
+    highlight: {
+      border: COLORS.green(COLOR_PACITIES.highlightBorder),
+      background: COLORS.green(COLOR_PACITIES.highlightBackground),
     },
   },
-  large_purple: {
-    name: '大（紫）',
-    size: 30,
-    color: {
-      border: '#9c27b0',
-      background: '#f3e5f5',
-      highlight: { border: '#7b1fa2', background: '#ba68c8' },
+  purple: {
+    name: '紫',
+    border: COLORS.purple(COLOR_PACITIES.border),
+    background: COLORS.purple(COLOR_PACITIES.background),
+    highlight: {
+      border: COLORS.purple(COLOR_PACITIES.highlightBorder),
+      background: COLORS.purple(COLOR_PACITIES.highlightBackground),
     },
   },
-  large_orange: {
-    name: '大（橙）',
-    size: 30,
-    color: {
-      border: '#ff9800',
-      background: '#fff3e0',
-      highlight: { border: '#f57c00', background: '#ffb74d' },
+  orange: {
+    name: '橙',
+    border: COLORS.orange(COLOR_PACITIES.border),
+    background: COLORS.orange(COLOR_PACITIES.background),
+    highlight: {
+      border: COLORS.orange(COLOR_PACITIES.highlightBorder),
+      background: COLORS.orange(COLOR_PACITIES.highlightBackground),
     },
   },
-  medium_red: {
-    name: '中（赤）',
-    size: 24,
+}
+
+// 形状オプション
+const SHAPE_OPTIONS = {
+  ellipse: { name: '楕円', shape: 'ellipse' },
+  circle: { name: '円', shape: 'circle' },
+  database: { name: 'データベース', shape: 'database' },
+  box: { name: '四角', shape: 'box' },
+  text: { name: 'テキスト', shape: 'text' },
+}
+
+// ノード設定を生成する関数
+const getNodeConfig = (
+  sizeKey: keyof typeof SIZE_OPTIONS,
+  colorKey: keyof typeof COLOR_OPTIONS,
+  shapeKey: keyof typeof SHAPE_OPTIONS
+) => {
+  const size = SIZE_OPTIONS[sizeKey]
+  const color = COLOR_OPTIONS[colorKey]
+  const shape = SHAPE_OPTIONS[shapeKey]
+
+  return {
+    size: size.size,
+    font: { size: size.font },
     color: {
-      border: '#ec407a',
-      background: '#fce4ec',
-      highlight: { border: '#d81b60', background: '#f06292' },
+      border: color.border,
+      background: color.background,
+      highlight: color.highlight,
     },
-  },
-  medium_blue: {
-    name: '中（青）',
-    size: 24,
-    color: {
-      border: '#42a5f5',
-      background: '#e3f2fd',
-      highlight: { border: '#1e88e5', background: '#64b5f6' },
-    },
-  },
-  medium_green: {
-    name: '中（緑）',
-    size: 24,
-    color: {
-      border: '#66bb6a',
-      background: '#e8f5e9',
-      highlight: { border: '#43a047', background: '#81c784' },
-    },
-  },
-  medium_purple: {
-    name: '中（紫）',
-    size: 24,
-    color: {
-      border: '#ab47bc',
-      background: '#f3e5f5',
-      highlight: { border: '#8e24aa', background: '#ba68c8' },
-    },
-  },
-  medium_orange: {
-    name: '中（橙）',
-    size: 24,
-    color: {
-      border: '#ffa726',
-      background: '#fff3e0',
-      highlight: { border: '#fb8c00', background: '#ffb74d' },
-    },
-  },
-  small_red: {
-    name: '小（赤）',
-    size: 18,
-    color: {
-      border: '#f06292',
-      background: '#ffffff',
-      highlight: { border: '#ec407a', background: '#ffcdd2' },
-    },
-  },
-  small_blue: {
-    name: '小（青）',
-    size: 18,
-    color: {
-      border: '#64b5f6',
-      background: '#ffffff',
-      highlight: { border: '#42a5f5', background: '#bbdefb' },
-    },
-  },
-  small_green: {
-    name: '小（緑）',
-    size: 18,
-    color: {
-      border: '#81c784',
-      background: '#ffffff',
-      highlight: { border: '#66bb6a', background: '#c8e6c9' },
-    },
-  },
-  small_purple: {
-    name: '小（紫）',
-    size: 18,
-    color: {
-      border: '#ba68c8',
-      background: '#ffffff',
-      highlight: { border: '#ab47bc', background: '#e1bee7' },
-    },
-  },
-  small_orange: {
-    name: '小（橙）',
-    size: 18,
-    color: {
-      border: '#ffb74d',
-      background: '#ffffff',
-      highlight: { border: '#ffa726', background: '#ffe0b2' },
-    },
-  },
+    shape: shape.shape,
+  }
 }
 
 const getOptions = (handleDeleteNode: any, handleEditNode: any, handleDeleteEdge: any) => ({
@@ -203,7 +166,7 @@ const getOptions = (handleDeleteNode: any, handleEditNode: any, handleDeleteEdge
     shape: 'circle',
     font: { size: 20, color: '#000000' },
     margin: { top: 10, right: 10, bottom: 10, left: 10 },
-    borderWidth: 2,
+    borderWidth: 1,
     color: {
       border: '#b5d7ffff',
       background: '#ffffffff',
@@ -228,7 +191,9 @@ function NetworkGraph() {
 
   // 新しいノード追加用のフォーム状態
   const [newNodeLabel, setNewNodeLabel] = useState('')
-  const [selectedNodeType, setSelectedNodeType] = useState<keyof typeof NODE_TYPES>('medium_blue')
+  const [selectedSize, setSelectedSize] = useState<keyof typeof SIZE_OPTIONS>('medium')
+  const [selectedColor, setSelectedColor] = useState<keyof typeof COLOR_OPTIONS>('blue')
+  const [selectedShape, setSelectedShape] = useState<keyof typeof SHAPE_OPTIONS>('circle')
 
   // 新しいエッジ追加用のフォーム状態
   const [edgeFrom, setEdgeFrom] = useState('')
@@ -472,15 +437,20 @@ function NetworkGraph() {
       return
     }
 
-    const nodeTypeConfig = NODE_TYPES[selectedNodeType]
+    const nodeConfig = getNodeConfig(selectedSize, selectedColor, selectedShape)
     const newNode = {
       id: nextNodeId,
       label: newNodeLabel,
-      shape: 'circle',
-      font: { size: nodeTypeConfig.size, color: '#000000' },
+      shape: nodeConfig.shape,
+      font: { size: nodeConfig.font.size, color: '#000000' },
       margin: { top: 10, right: 10, bottom: 10, left: 10 },
-      borderWidth: 2,
-      color: nodeTypeConfig.color,
+      borderWidth: 1,
+      size: nodeConfig.size,
+      color: nodeConfig.color,
+      // 設定情報を保存（編集時の復元用）
+      nodeSize: selectedSize,
+      nodeColor: selectedColor,
+      nodeShape: selectedShape,
     }
 
     nodesDataSet.current.add(newNode)
@@ -665,29 +635,29 @@ function NetworkGraph() {
       okType: 'danger',
       async onOk() {
         try {
-          // 查找并删除关联的边
+          // 関連エッジを検索して削除
           const allEdges = edgesDataSet.current.get()
           const edgesToDelete = allEdges.filter(
             (edge: any) =>
               selectedNodeIdsInModal.includes(edge.from) || selectedNodeIdsInModal.includes(edge.to)
           )
 
-          // 从 IndexedDB 删除边
+          // IndexedDBからエッジを削除
           for (const edge of edgesToDelete) {
             await deleteEdge(edge.id)
           }
 
-          // 从 DataSet 删除边
+          // DataSetからエッジを削除
           if (edgesToDelete.length > 0) {
             edgesDataSet.current.remove(edgesToDelete.map((e: any) => e.id))
           }
 
-          // 从 IndexedDB 删除节点
+          // IndexedDBからノードを削除
           for (const id of selectedNodeIdsInModal) {
             await deleteNode(id)
           }
 
-          // 从 DataSet 删除节点
+          // DataSetからノードを削除
           nodesDataSet.current.remove(selectedNodeIdsInModal)
           setSelectedNodeIdsInModal([])
           message.success('ノードを削除しました')
@@ -700,34 +670,50 @@ function NetworkGraph() {
     })
   }
 
-  // 打开编辑节点模态框
+  // ノード編集モーダルを開く
   const openEditNodeModal = (node: any) => {
-    setEditingNode({ ...node, nodeType: 'medium_blue' })
+    // 既存ノードから設定を取得、存在しない場合はデフォルト値を使用
+    setEditingNode({
+      ...node,
+      nodeSize: node.nodeSize || 'medium',
+      nodeColor: node.nodeColor || 'blue',
+    })
     setIsEditNodeModalVisible(true)
   }
 
-  // 关闭编辑节点模态框
+  // ノード編集モーダルを閉じる
   const closeEditNodeModal = () => {
     setEditingNode(null)
     setIsEditNodeModalVisible(false)
   }
 
-  // 保存编辑后的节点
+  // 編集後のノードを保存
   const saveEditedNode = async () => {
     if (!editingNode || !editingNode.label.trim()) {
-      message.error('请输入节点名称')
+      message.error('ノード名を入力してください')
       return
     }
 
     try {
       const nodeInDataSet = nodesDataSet.current.get(editingNode.id)
-      const nodeTypeConfig = NODE_TYPES[editingNode.nodeType as keyof typeof NODE_TYPES]
+      const nodeConfig = getNodeConfig(
+        editingNode.nodeSize as keyof typeof SIZE_OPTIONS,
+        editingNode.nodeColor as keyof typeof COLOR_OPTIONS,
+        editingNode.shape as keyof typeof SHAPE_OPTIONS
+      )
 
       const updatedNode = {
         ...nodeInDataSet,
         label: editingNode.label.trim(),
-        font: { size: nodeTypeConfig.size, color: '#000000' },
-        color: nodeTypeConfig.color,
+        shape: nodeConfig.shape,
+        font: { size: nodeConfig.font.size, color: '#000000' },
+        size: nodeConfig.size,
+        color: nodeConfig.color,
+        borderWidth: 1,
+        // 設定情報を保存（編集時の復元用）
+        nodeSize: editingNode.nodeSize,
+        nodeColor: editingNode.nodeColor,
+        nodeShape: editingNode.shape,
       }
 
       await saveNode(updatedNode)
@@ -740,19 +726,19 @@ function NetworkGraph() {
     }
   }
 
-  // 打开编辑边模态框
+  // エッジ編集モーダルを開く
   const openEditEdgeModal = (edge: any) => {
     setEditingEdge(edge)
     setIsEditEdgeModalVisible(true)
   }
 
-  // 关闭编辑边模态框
+  // エッジ編集モーダルを閉じる
   const closeEditEdgeModal = () => {
     setEditingEdge(null)
     setIsEditEdgeModalVisible(false)
   }
 
-  // 保存编辑后的边
+  // 編集後のエッジを保存
   const saveEditedEdge = async () => {
     if (!editingEdge) {
       return
@@ -1163,13 +1149,47 @@ function NetworkGraph() {
             <Typography.Text>{editingNode?.id}</Typography.Text>
           </div>
           <div>
-            <Typography.Text strong>ノードタイプ</Typography.Text>
+            <Typography.Text strong>サイズ</Typography.Text>
             <Select
-              value={editingNode?.nodeType}
-              onChange={(value) => setEditingNode({ ...editingNode, nodeType: value })}
+              value={editingNode?.nodeSize}
+              onChange={(value) => setEditingNode({ ...editingNode, nodeSize: value })}
               style={{ width: '100%', marginTop: '8px' }}
             >
-              {Object.entries(NODE_TYPES).map(([key, value]) => (
+              {Object.entries(SIZE_OPTIONS).map(([key, value]) => (
+                <Select.Option
+                  key={key}
+                  value={key}
+                >
+                  {value.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </div>
+          <div>
+            <Typography.Text strong>カラー</Typography.Text>
+            <Select
+              value={editingNode?.nodeColor}
+              onChange={(value) => setEditingNode({ ...editingNode, nodeColor: value })}
+              style={{ width: '100%', marginTop: '8px' }}
+            >
+              {Object.entries(COLOR_OPTIONS).map(([key, value]) => (
+                <Select.Option
+                  key={key}
+                  value={key}
+                >
+                  {value.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </div>
+          <div>
+            <Typography.Text strong>形状</Typography.Text>
+            <Select
+              value={editingNode?.shape}
+              onChange={(value) => setEditingNode({ ...editingNode, shape: value })}
+              style={{ width: '100%', marginTop: '8px' }}
+            >
+              {Object.entries(SHAPE_OPTIONS).map(([key, value]) => (
                 <Select.Option
                   key={key}
                   value={key}
@@ -1203,21 +1223,29 @@ function NetworkGraph() {
                 minHeight: '100px',
               }}
             >
-              {editingNode?.nodeType && (
+              {editingNode?.nodeSize && editingNode?.nodeColor && editingNode?.shape && (
                 <div
                   style={{
-                    width: NODE_TYPES[editingNode.nodeType as keyof typeof NODE_TYPES].size * 3,
-                    height: NODE_TYPES[editingNode.nodeType as keyof typeof NODE_TYPES].size * 3,
-                    borderRadius: '50%',
+                    width: SIZE_OPTIONS[editingNode.nodeSize as keyof typeof SIZE_OPTIONS].size * 3,
+                    height:
+                      SIZE_OPTIONS[editingNode.nodeSize as keyof typeof SIZE_OPTIONS].size * 3,
+                    borderRadius:
+                      editingNode.shape === 'circle'
+                        ? '50%'
+                        : editingNode.shape === 'ellipse'
+                        ? '50%'
+                        : editingNode.shape === 'box'
+                        ? '8px'
+                        : '0',
                     border: `3px solid ${
-                      NODE_TYPES[editingNode.nodeType as keyof typeof NODE_TYPES].color.border
+                      COLOR_OPTIONS[editingNode.nodeColor as keyof typeof COLOR_OPTIONS].border
                     }`,
                     background:
-                      NODE_TYPES[editingNode.nodeType as keyof typeof NODE_TYPES].color.background,
+                      COLOR_OPTIONS[editingNode.nodeColor as keyof typeof COLOR_OPTIONS].background,
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    fontSize: NODE_TYPES[editingNode.nodeType as keyof typeof NODE_TYPES].size,
+                    fontSize: SIZE_OPTIONS[editingNode.nodeSize as keyof typeof SIZE_OPTIONS].font,
                     fontWeight: 'normal',
                     color: '#000000',
                   }}
@@ -1313,13 +1341,47 @@ function NetworkGraph() {
           style={{ width: '100%' }}
         >
           <div>
-            <Typography.Text strong>ノードタイプ</Typography.Text>
+            <Typography.Text strong>サイズ</Typography.Text>
             <Select
-              value={selectedNodeType}
-              onChange={(value) => setSelectedNodeType(value as keyof typeof NODE_TYPES)}
+              value={selectedSize}
+              onChange={(value) => setSelectedSize(value as keyof typeof SIZE_OPTIONS)}
               style={{ width: '100%', marginTop: '8px' }}
             >
-              {Object.entries(NODE_TYPES).map(([key, value]) => (
+              {Object.entries(SIZE_OPTIONS).map(([key, value]) => (
+                <Select.Option
+                  key={key}
+                  value={key}
+                >
+                  {value.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </div>
+          <div>
+            <Typography.Text strong>カラー</Typography.Text>
+            <Select
+              value={selectedColor}
+              onChange={(value) => setSelectedColor(value as keyof typeof COLOR_OPTIONS)}
+              style={{ width: '100%', marginTop: '8px' }}
+            >
+              {Object.entries(COLOR_OPTIONS).map(([key, value]) => (
+                <Select.Option
+                  key={key}
+                  value={key}
+                >
+                  {value.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </div>
+          <div>
+            <Typography.Text strong>形状</Typography.Text>
+            <Select
+              value={selectedShape}
+              onChange={(value) => setSelectedShape(value as keyof typeof SHAPE_OPTIONS)}
+              style={{ width: '100%', marginTop: '8px' }}
+            >
+              {Object.entries(SHAPE_OPTIONS).map(([key, value]) => (
                 <Select.Option
                   key={key}
                   value={key}
@@ -1356,15 +1418,22 @@ function NetworkGraph() {
             >
               <div
                 style={{
-                  width: NODE_TYPES[selectedNodeType].size * 3,
-                  height: NODE_TYPES[selectedNodeType].size * 3,
-                  borderRadius: '50%',
-                  border: `3px solid ${NODE_TYPES[selectedNodeType].color.border}`,
-                  background: NODE_TYPES[selectedNodeType].color.background,
+                  width: SIZE_OPTIONS[selectedSize].size * 3,
+                  height: SIZE_OPTIONS[selectedSize].size * 3,
+                  borderRadius:
+                    selectedShape === 'circle'
+                      ? '50%'
+                      : selectedShape === 'ellipse'
+                      ? '50%'
+                      : selectedShape === 'box'
+                      ? '8px'
+                      : '0',
+                  border: `3px solid ${COLOR_OPTIONS[selectedColor].border}`,
+                  background: COLOR_OPTIONS[selectedColor].background,
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  fontSize: NODE_TYPES[selectedNodeType].size,
+                  fontSize: SIZE_OPTIONS[selectedSize].font,
                   fontWeight: 'normal',
                   color: '#000000',
                 }}
